@@ -25,7 +25,7 @@ import (
 	"os"
 	"testing"
 
-	ft "github.com/openshift/ansible-service-broker/pkg/fusortest"
+	ft "github.com/stretchr/testify/assert"
 )
 
 var config *Config
@@ -43,15 +43,15 @@ func TestMain(m *testing.M) {
 func TestConfigGetInt(t *testing.T) {
 	testInt := config.GetInt("broker.testInt")
 	testInvalidInt := config.GetInt("makes.no.sense")
-	ft.AssertEqual(t, 100, testInt)
-	ft.AssertEqual(t, 0, testInvalidInt)
+	ft.Equal(t, 100, testInt)
+	ft.Equal(t, 0, testInvalidInt)
 }
 
 func TestConfigGetString(t *testing.T) {
 	testString := config.GetString("registry.dh.user")
 	testInvalidString := config.GetString("makes.no.sense")
-	ft.AssertEqual(t, "shurley", testString)
-	ft.AssertEqual(t, "", testInvalidString)
+	ft.Equal(t, "shurley", testString)
+	ft.Equal(t, "", testInvalidString)
 }
 
 func TestConfigGetSliceString(t *testing.T) {
@@ -63,10 +63,10 @@ func TestConfigGetSliceString(t *testing.T) {
 		t.Fail()
 	}
 	for i, str := range testString {
-		ft.AssertEqual(t, value[i], str)
+		ft.Equal(t, value[i], str)
 	}
 	for i, str := range whiteList {
-		ft.AssertEqual(t, whiteListValue[i], str)
+		ft.Equal(t, whiteListValue[i], str)
 	}
 }
 
@@ -74,16 +74,16 @@ func TestConfigGetFloat32(t *testing.T) {
 	testFloat32 := config.GetFloat32("broker.testFloat32")
 	testInvalidFloat32 := config.GetFloat32("makes.no.sense")
 	var defaultFloat32 float32
-	ft.AssertEqual(t, float32(32.87), testFloat32)
-	ft.AssertEqual(t, defaultFloat32, testInvalidFloat32)
+	ft.Equal(t, float32(32.87), testFloat32)
+	ft.Equal(t, defaultFloat32, testInvalidFloat32)
 }
 
 func TestConfigGetFloat64(t *testing.T) {
 	testFloat64 := config.GetFloat64("broker.testFloat64")
 	testInvalidFloat64 := config.GetFloat64("makes.no.sense")
 	var defaultFloat64 float64
-	ft.AssertEqual(t, float64(45677.0799485958595), testFloat64)
-	ft.AssertEqual(t, defaultFloat64, testInvalidFloat64)
+	ft.Equal(t, float64(45677.0799485958595), testFloat64)
+	ft.Equal(t, defaultFloat64, testInvalidFloat64)
 }
 
 func TestConfigGetBool(t *testing.T) {
@@ -98,10 +98,10 @@ func TestConfigGetSubMap(t *testing.T) {
 	testInvalidSubConfigArray := config.GetSubConfig("registry")
 	testSubMap := config.GetSubConfig("broker.new_object")
 	testSubMapBroker := config.GetSubConfig("broker")
-	ft.AssertEqual(t, testSubMap.GetString("key"), "value1")
-	ft.AssertEqual(t, testSubMap.GetString("key2"), "value2")
-	ft.AssertEqual(t, testSubMapBroker.GetString("new_object.key"), "value1")
-	ft.AssertEqual(t, testSubMapBroker.GetString("new_object.key2"), "value2")
+	ft.Equal(t, testSubMap.GetString("key"), "value1")
+	ft.Equal(t, testSubMap.GetString("key2"), "value2")
+	ft.Equal(t, testSubMapBroker.GetString("new_object.key"), "value1")
+	ft.Equal(t, testSubMapBroker.GetString("new_object.key2"), "value2")
 	ft.AssertTrue(t, testInvalidSubMap.Empty())
 	ft.AssertTrue(t, testInvalidSubConfigArray.Empty())
 }
@@ -117,8 +117,8 @@ func TestConfigGetMap(t *testing.T) {
 func TestGetSubConfigArray(t *testing.T) {
 	testSubConfig := config.GetSubConfigArray("registry")
 	testInvalidSubConfig := config.GetSubConfigArray("makes.no_sense")
-	ft.AssertEqual(t, len(testInvalidSubConfig), 0)
-	ft.AssertEqual(t, len(testSubConfig), 2)
-	ft.AssertEqual(t, testSubConfig[0].GetString("name"), "dh")
-	ft.AssertEqual(t, testSubConfig[1].GetString("name"), "play")
+	ft.Equal(t, len(testInvalidSubConfig), 0)
+	ft.Equal(t, len(testSubConfig), 2)
+	ft.Equal(t, testSubConfig[0].GetString("name"), "dh")
+	ft.Equal(t, testSubConfig[1].GetString("name"), "play")
 }

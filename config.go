@@ -26,12 +26,8 @@ import (
 	"strings"
 	"sync"
 
-	logutil "github.com/openshift/ansible-service-broker/pkg/util/logging"
+	log "github.com/sirupsen/logrus"
 	yaml "gopkg.in/yaml.v1"
-)
-
-var (
-	log = logutil.NewLog()
 )
 
 // Config - The base config for the pieces of the applcation
