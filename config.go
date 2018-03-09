@@ -52,6 +52,11 @@ func CreateConfig(configFile string) (*Config, error) {
 	return &Config{config: c, mutex: sync.RWMutex{}}, nil
 }
 
+// NewConfigFromMap - Create a new config object from the underlying map
+func NewConfigFromMap(m map[string]interface{}) *Config {
+	return &Config{config: m, mutex: sync.RWMutex{}}
+}
+
 // Empty - Determines if the configuration is empty
 func (c *Config) Empty() bool {
 	return len(c.config) == 0

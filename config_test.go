@@ -40,6 +40,17 @@ func TestMain(m *testing.M) {
 	os.Exit(retCode)
 }
 
+func TestNewConfigForMap(t *testing.T) {
+	c := NewConfigFromMap(map[string]interface{}{"get": map[string]interface{}{"string": "hello"}})
+	fmt.Printf("%v", c.GetString("get.me.string"))
+	if c.Empty() {
+		t.Fatal("new config should not be empty")
+	}
+	if c.GetString("get.string") != "hello" {
+		t.Fatal("new config from map should have key: get.me.string")
+	}
+}
+
 func TestConfigGetInt(t *testing.T) {
 	testInt := config.GetInt("broker.testInt")
 	testInvalidInt := config.GetInt("makes.no.sense")
@@ -89,8 +100,8 @@ func TestConfigGetFloat64(t *testing.T) {
 func TestConfigGetBool(t *testing.T) {
 	testBoolTrue := config.GetBool("broker.recovery")
 	testInvalidBool := config.GetBool("makes.no.sense")
-	ft.AssertTrue(t, testBoolTrue)
-	ft.AssertFalse(t, testInvalidBool)
+	ft.True(t, testBoolTrue)
+	ft.False(t, testInvalidBool)
 }
 
 func TestConfigGetSubMap(t *testing.T) {
@@ -102,16 +113,16 @@ func TestConfigGetSubMap(t *testing.T) {
 	ft.Equal(t, testSubMap.GetString("key2"), "value2")
 	ft.Equal(t, testSubMapBroker.GetString("new_object.key"), "value1")
 	ft.Equal(t, testSubMapBroker.GetString("new_object.key2"), "value2")
-	ft.AssertTrue(t, testInvalidSubMap.Empty())
-	ft.AssertTrue(t, testInvalidSubConfigArray.Empty())
+	ft.True(t, testInvalidSubMap.Empty())
+	ft.True(t, testInvalidSubConfigArray.Empty())
 }
 
 func TestConfigGetMap(t *testing.T) {
 	testMap := config.GetSubConfig("broker").ToMap()
 	_, ok := testMap["dev_broker"]
-	ft.AssertTrue(t, ok)
+	ft.True(t, ok)
 	_, ok = testMap["recovery"]
-	ft.AssertTrue(t, ok)
+	ft.True(t, ok)
 }
 
 func TestGetSubConfigArray(t *testing.T) {
